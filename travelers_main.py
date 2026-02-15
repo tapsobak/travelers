@@ -66,7 +66,16 @@ def total_distance(itinerary):
     return total_distance_traveled
 
 
-if "__name__" == "__main__":
+def recap():
+    loaded_towns = load_towns("towns.txt")
+    print(f"Total Number of Towns: {len(loaded_towns)}")
+    print("**********************Heuristic Itinerary Below**********************\n")
+    itinerary = itinenary_greedy(loaded_towns)
+    print(itinerary)
+    print(f"\nTotal Distance Traveled: {total_distance(itinerary)}")
+
+
+if __name__ == "__main__":
     # Load towns once and reuse
     towns = load_towns("towns.txt")
 
@@ -78,3 +87,6 @@ if "__name__" == "__main__":
 
     # Calculate total distance
     total_distance(itinerary)
+
+    # recap
+    recap()
