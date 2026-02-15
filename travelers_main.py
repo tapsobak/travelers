@@ -57,6 +57,24 @@ def itinenary_greedy(towns):
     return itinerary
 
 
+def total_distance(itinerary):
+    """Caluclate the total distance traveled based on the heuristic itinerary."""
+    total = 0
+
+    total_distance_traveled = sum(i[1] for i in itinerary)
+
+    return total_distance_traveled
+
+
 if "__name__" == "__main__":
-    load_towns("towns.txt")
-    distance(load_towns("towns.txt")[0], load_towns("towns.txt")[1])
+    # Load towns once and reuse
+    towns = load_towns("towns.txt")
+
+    # Calculate distance between first two towns
+    distance(towns[0], towns[1])
+
+    # Compute itinerary once and reuse
+    itinerary = itinenary_greedy(towns)
+
+    # Calculate total distance
+    total_distance(itinerary)
