@@ -1,5 +1,6 @@
 import os
 import math
+import shlex
 
 
 def load_towns(path):
@@ -10,7 +11,7 @@ def load_towns(path):
         with open(full_path, "r") as file:
             contents = file.read().splitlines()  # creating a list of 'Town, X, Y'
             town_details = [
-                tuple(content.split()) for content in contents
+                tuple(shlex.split(line)) for line in contents if line.strip()
             ]  # convertint the string 'Town X, Y' into a tuple ('Town, X, Y')
             return town_details
     else:
@@ -25,7 +26,35 @@ def distance(townA, townB):
 
     result = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-    return round(result, 3)
+    return round(result, 5)
+
+
+def itinenary_greedy(towns):
+    """Determine the order to visit all the the towns in the list based on the shorted distance"""
+    # step 0: remove Paris from the list
+    # step 1: calculate the distance between Paris and every other town
+    # step 2: pick the smallest distance and that will be the next town
+    # step 4: remove the current town in the list
+    # repeat step 1 to 4
+    itinerary = []
+    current_town = towns.pop(0)
+    itinerary.append((current_town[0], 0))
+
+    while towns:
+        distances = []
+        for i in range(len(towns)):
+            d = distance(current_town, towns[i])
+            distances.append((i, d))
+
+        # Find the shortest the distance between the current town and the next one based on the list of towns
+        closest_town_details = min(distances, key=lambda x: x[1])
+
+        closest_town_index = closest_town_details[0]
+        closest_town_distance = closest_town_details[1]
+        current_town = towns.pop(closest_town_index)
+        itinerary.append((current_town, closest_town_distance))
+
+    return itinerary
 
 
 if "__name__" == "__main__":
